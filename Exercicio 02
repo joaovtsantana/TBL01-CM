@@ -1,0 +1,85 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MeuApp());
+}
+
+class MeuApp extends StatelessWidget {
+  const MeuApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const Tela1(),
+    );
+  }
+}
+
+// TELA 1
+class Tela1 extends StatelessWidget {
+  const Tela1({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Tela 1'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const Tela2(
+                  nome: 'Maria',
+                ),
+              ),
+            );
+          },
+          child: const Text('Enviar Nome'),
+        ),
+      ),
+    );
+  }
+}
+
+// TELA 2
+class Tela2 extends StatelessWidget {
+  final String nome;
+
+  const Tela2({
+    super.key,
+    required this.nome,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Tela 2'),
+      ),
+      body: Center(
+        child: Text(
+          'Olá, $nome',
+          style: const TextStyle(
+            fontSize: 24,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+1. Por que usamos construtor?
+Usamos o construtor porque ele permite enviar informações de uma tela para outra no momento em que a nova tela é criada. No exercício, o nome "Maria" é passado da Tela1 para a Tela2 através do construtor, permitindo que a Tela2 receba e utilize esse valor sem precisar de uma variável global.
+
+2. Por que Tela2 pode ser Stateless?
+A Tela2 pode ser StatelessWidget porque o nome recebido não precisa ser alterado enquanto a tela está sendo exibida. Ela apenas recebe o valor pelo construtor e mostra "Olá, Maria" na tela. Como não existe mudança de estado, não é necessário utilizar setState.
+
+3. O dado pode mudar depois que a tela é criada?
+Nesse exemplo, não. Como o nome é recebido pelo construtor e armazenado em uma variável final, ele não pode ser alterado depois que a Tela2 é criada. Para modificar o dado durante a execução, seria necessário utilizar algum mecanismo de gerenciamento de estado.
+
+
+
