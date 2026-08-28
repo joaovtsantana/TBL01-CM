@@ -1,0 +1,113 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MeuApp());
+}
+
+class MeuApp extends StatelessWidget {
+  const MeuApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const Tela1(),
+    );
+  }
+}
+
+// TELA 1
+class Tela1 extends StatefulWidget {
+  const Tela1({super.key});
+
+  @override
+  State<Tela1> createState() => _Tela1State();
+}
+
+class _Tela1State extends State<Tela1> {
+  int valorAtual = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Tela 1'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Valor atual: $valorAtual',
+              style: const TextStyle(fontSize: 24),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                final resultado = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Tela2(),
+                  ),
+                );
+
+                if (resultado != null) {
+                  setState(() {
+                    valorAtual = resultado;
+                  });
+                }
+              },
+              child: const Text('Escolher Número'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// TELA 2
+class Tela2 extends StatelessWidget {
+  const Tela2({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Tela 2'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context, 10);
+              },
+              child: const Text('Enviar 10'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context, 20);
+              },
+              child: const Text('Enviar 20'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+O que acontece se remover o await?
+Se remover o await, o programa não espera a Tela2 retornar um valor antes de continuar a execução. O Navigator.push retorna um Future, que representa um valor que será recebido no futuro. Sem o await, a variável resultado receberia o Future, e não diretamente o número escolhido.
+
+O que acontece se remover o async?
+Se remover o async, não será possível utilizar await dentro do onPressed. O await só pode ser usado dentro de uma função marcada como async, então o código apresentará um erro.
+
+O que é Future?
+Future é um objeto que representa um valor que ainda será obtido no futuro. No exercício, o Navigator.push retorna um Future porque a Tela1 precisa esperar a Tela2 ser fechada para descobrir qual número foi escolhido.
+
+Quando o valor realmente é recebido?
+O valor é recebido quando a Tela2 executa Navigator.pop(context, valor). Por exemplo, quando o usuário toca em "Enviar 10", a Tela2 retorna o valor 10. O await espera esse momento e, depois disso, o valor fica disponível na variável resultado, permitindo que a Tela1 use setState para atualizar o texto.
